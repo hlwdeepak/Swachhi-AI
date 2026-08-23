@@ -1,6 +1,7 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { User } from './types';
+import { initClientMock } from './mock-client';
 
 interface AuthContextType {
   user: User | null;
@@ -21,6 +22,10 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    initClientMock();
+  }, []);
 
   const refresh = useCallback(async () => {
     try {

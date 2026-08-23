@@ -3,9 +3,15 @@ import { verifyToken } from './auth';
 import { JWTPayload, Role } from './types';
 
 export function getAuthUser(req: NextRequest): JWTPayload | null {
-  const token = req.cookies.get('swachhai_token')?.value;
-  if (!token) return null;
-  return verifyToken(token);
+  try {
+    const cookieHeader = req.headers.get('cookie') || '';
+    const match = cookieHeader.match(/swachhai_token=([^;]+)/);
+    const token = match ? decodeURIComponent(match[1]) : null;
+    if (!token) return null;
+    return verifyToken(token);
+  } catch {
+    return null;
+  }
 }
 
 export function requireAuth(req: NextRequest, allowedRoles?: Role[]): JWTPayload | null {
