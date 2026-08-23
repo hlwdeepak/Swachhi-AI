@@ -151,6 +151,7 @@ const COMPLAINT_TEMPLATES: ComplaintSeed[] = [
 ];
 
 export async function seedDatabase() {
+  if (process.env.GITHUB_ACTIONS === 'true') return;
   const db = getDb();
 
   // Check if already seeded
